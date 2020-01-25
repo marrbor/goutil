@@ -160,15 +160,20 @@ func RandString(n int) string {
 	return string(b)
 }
 
-// StructToStringMap returns map[string]string
+// StructToStringMap convert structure contents to map[string]string.
+// Field tag specified by tagName is used for key, and Field va string is
+// Map keys are string that has been given value of tag specified by 'tagName'.
+// Map values are value of that field, return empty map when nil is given for 's'.
 func StructToStringMap(tagName string, s interface{}) *map[string]string {
 	var ret = make(map[string]string)
-	t := reflect.TypeOf(s)
-	v := reflect.ValueOf(s)
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		tag := field.Tag.Get(tagName)
-		ret[tag] = fmt.Sprintf("%v", v.FieldByName(field.Name))
+	if s != nil {
+		t := reflect.TypeOf(s)
+		v := reflect.ValueOf(s)
+		for i := 0; i < t.NumField(); i++ {
+			field := t.Field(i)
+			tag := field.Tag.Get(tagName)
+			ret[tag] = fmt.Sprintf("%v", v.FieldByName(field.Name))
+		}
 	}
 	return &ret
 }

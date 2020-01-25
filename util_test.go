@@ -311,4 +311,7 @@ func TestStructToStringMap(t *testing.T) {
 	mm := *m
 	assert.EqualValues(t, "abc", mm["id"])
 	assert.EqualValues(t, "123", mm["number"])
+
+	m = goutil.StructToStringMap("json", nil)
+	assert.EqualValues(t, 0, len(*m))
 }
