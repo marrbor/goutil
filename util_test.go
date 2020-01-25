@@ -294,3 +294,21 @@ func TestRandString(t *testing.T) {
 		assert.True(t, r.Match([]byte(s)))
 	}
 }
+
+func TestStructToStringMap(t *testing.T) {
+	t1 := struct {
+		ID     string   `json:"id"`
+		Number int      `json:"number"`
+		Array  []string `json:"array"`
+	}{
+		ID:     "abc",
+		Number: 123,
+		Array:  []string{"ABC", "DEF", "GHI"},
+	}
+
+	m := goutil.StructToStringMap("json", t1)
+	assert.NotNil(t, m)
+	mm := *m
+	assert.EqualValues(t, "abc", mm["id"])
+	assert.EqualValues(t, "123", mm["number"])
+}

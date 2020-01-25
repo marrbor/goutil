@@ -10,6 +10,7 @@ import (
 	"math/rand"
 	"net/url"
 	"path"
+	"reflect"
 	"strings"
 	"time"
 )
@@ -157,4 +158,17 @@ func RandString(n int) string {
 		remain--
 	}
 	return string(b)
+}
+
+// StructToStringMap returns map[string]string
+func StructToStringMap(tagName string, s interface{}) *map[string]string {
+	var ret = make(map[string]string)
+	t := reflect.TypeOf(s)
+	v := reflect.ValueOf(s)
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		tag := field.Tag.Get(tagName)
+		ret[tag] = fmt.Sprintf("%v", v.FieldByName(field.Name))
+	}
+	return &ret
 }
