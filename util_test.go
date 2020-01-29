@@ -322,3 +322,15 @@ func TestDetectOSVersion(t *testing.T) {
 	assert.NoError(t, err)
 	t.Log(ver)
 }
+
+func TestGetMacAddress(t *testing.T) {
+	ip, err := goutil.GetIP()
+	assert.NoError(t, err)
+
+	nic, err := goutil.GetInterface(ip)
+	assert.NoError(t, err)
+
+	mac, err := goutil.GetMacAddress(nic)
+	assert.NoError(t, err)
+	t.Log(mac)
+}

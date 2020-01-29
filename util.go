@@ -7,6 +7,7 @@ import (
 	"hash/fnv"
 	"math"
 	"math/rand"
+	"net"
 	"net/url"
 	"path"
 	"reflect"
@@ -253,4 +254,56 @@ func getUnixRelease() (string, error) {
 		return "", err
 	}
 	return uname2str(uname.Release), nil
+}
+
+// GetIP returns IP address of this reporter
+func GetIP() (string, error) {
+	// gather ip addresses.
+	as, err := net.InterfaceAddrs()
+	if err != nil {
+		return "", err
+	}
+
+	// seek ip address that is not a loopback.
+	for _, a := range as {
+		if ipNet, ok := a.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
+			if ipNet.IP.To4() != nil {
+				return ipNet.IP.String(), nil // got it.
+			}
+		}
+	}
+	return "", fmt.Errorf("effective adress not found")
+}
+
+// GetInterfaceName returns NIC for given IP.
+func GetInterface(ip string) (*net.Interface, error) {
+	// gather interfaces.
+	ifs, err := net.Interfaces()
+	if err != nil {
+		return nil, err
+	}
+
+	// seek network interface bind for given IP
+	for _, i := range ifs {
+		if a, err := i.Addrs(); err == nil {
+			for _, addr := range a {
+				if strings.Contains(addr.String(), ip) {
+					return &i, nil
+				}
+			}
+		}
+	}
+	return nil, fmt.Errorf("NIC not found")
+}
+
+// GetMacAddress returns mac address for given NIC.
+func GetMacAddress(nic *net.Interface) (string, error) {
+	// extract the hardware information base on the interface name capture above
+	i, err := net.InterfaceByName(nic.Name)
+	if err != nil {
+		return "", err
+	}
+	hwa := i.HardwareAddr
+	mac := hwa.String()
+	return mac, nil
 }
