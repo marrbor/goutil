@@ -1,12 +1,13 @@
 package goutil_test
 
 import (
-	"github.com/marrbor/goutil"
-	"github.com/stretchr/testify/assert"
 	"net/url"
 	"regexp"
 	"testing"
 	"time"
+
+	"github.com/marrbor/goutil"
+	"github.com/stretchr/testify/assert"
 )
 
 type testData struct {
@@ -314,4 +315,10 @@ func TestStructToStringMap(t *testing.T) {
 
 	m = goutil.StructToStringMap("json", nil)
 	assert.EqualValues(t, 0, len(*m))
+}
+
+func TestDetectOSVersion(t *testing.T) {
+	ver, err := goutil.DetectOSVersion()
+	assert.NoError(t, err)
+	t.Log(ver)
 }
