@@ -204,7 +204,7 @@ func getWindowsVer() (string, error) {
 	return "", nil
 }
 
-func uname2str(u [256]byte) string {
+func uname2str(u []byte) string {
 	str := ""
 	for _, v := range u {
 		m := int(v)
@@ -221,7 +221,7 @@ func getUnixVer() (string, error) {
 	if err := unix.Uname(&uname); err != nil {
 		return "", err
 	}
-	return uname2str(uname.Version), nil
+	return uname2str(uname.Version[:]), nil
 }
 
 func getUnixSysName() (string, error) {
@@ -229,7 +229,7 @@ func getUnixSysName() (string, error) {
 	if err := unix.Uname(&uname); err != nil {
 		return "", err
 	}
-	return uname2str(uname.Sysname), nil
+	return uname2str(uname.Sysname[:]), nil
 }
 
 func getUnixNodeName() (string, error) {
@@ -237,7 +237,7 @@ func getUnixNodeName() (string, error) {
 	if err := unix.Uname(&uname); err != nil {
 		return "", err
 	}
-	return uname2str(uname.Nodename), nil
+	return uname2str(uname.Nodename[:]), nil
 }
 
 func getUnixMachineName() (string, error) {
@@ -245,7 +245,7 @@ func getUnixMachineName() (string, error) {
 	if err := unix.Uname(&uname); err != nil {
 		return "", err
 	}
-	return uname2str(uname.Machine), nil
+	return uname2str(uname.Machine[:]), nil
 }
 
 func getUnixRelease() (string, error) {
@@ -253,7 +253,7 @@ func getUnixRelease() (string, error) {
 	if err := unix.Uname(&uname); err != nil {
 		return "", err
 	}
-	return uname2str(uname.Release), nil
+	return uname2str(uname.Release[:]), nil
 }
 
 // GetIP returns IP address of this reporter
