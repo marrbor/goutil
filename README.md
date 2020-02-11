@@ -1,2 +1,4 @@
 # goutil
 
+## Lincense
+MIT
