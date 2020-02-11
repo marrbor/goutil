@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 	"golang.org/x/sys/unix"
 )
 
@@ -94,7 +94,7 @@ func IsFirstDayOfMonth(time time.Time) bool {
 
 // GetCode returns given length code generated from uuid.
 func GetCode(number int) string {
-	id, _ := uuid.NewV4()
+	id, _ := uuid.NewRandom()
 	uuID := fmt.Sprintf("%s", id)
 	if number <= 8 {
 		return uuID[:number] // use first 8 digit.
