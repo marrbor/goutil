@@ -1,6 +1,7 @@
 package goutil_test
 
 import (
+	"net"
 	"net/url"
 	"regexp"
 	"testing"
@@ -333,4 +334,16 @@ func TestGetMacAddress(t *testing.T) {
 	mac, err := goutil.GetMacAddress(nic)
 	assert.NoError(t, err)
 	t.Log(mac)
+}
+
+func TestValidateMacAddress(t *testing.T) {
+	nics, err := net.Interfaces()
+	assert.NoError(t, err)
+	for _, nic := range nics {
+		adr := nic.HardwareAddr.String()
+		if 0 < len(adr) {
+			t.Logf(adr)
+			assert.True(t, goutil.ValidateMacAddress(adr))
+		}
+	}
 }

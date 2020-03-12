@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"path"
 	"reflect"
+	"regexp"
 	"runtime"
 	"strings"
 	"time"
@@ -306,4 +307,12 @@ func GetMacAddress(nic *net.Interface) (string, error) {
 	hwa := i.HardwareAddr
 	mac := hwa.String()
 	return mac, nil
+}
+
+// RegexpMacAddressType express the regular expression that detect mac address strings.
+var RegexpMacAddressType = regexp.MustCompile("^([[:xdigit:]]{2}[:.-]?){5}[[:xdigit:]]{2}$")
+
+// ValidateMacAddress returns whether given string suit for mac address or not.
+func ValidateMacAddress(mac string) bool {
+	return RegexpMacAddressType.Match([]byte(mac))
 }
