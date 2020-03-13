@@ -289,9 +289,21 @@ func TestRandString(t *testing.T) {
 	s := goutil.RandString(0)
 	assert.EqualValues(t, 0, len(s))
 
-	r := regexp.MustCompile(`^[A-Za-z]+$`)
+	r := regexp.MustCompile(`^[A-Za-z0-9!#$%^~*&+\-=?_]+$`)
 	for i := 1; i <= 100; i++ {
 		s = goutil.RandString(i)
+		assert.EqualValues(t, i, len(s))
+		assert.True(t, r.Match([]byte(s)))
+	}
+}
+
+func TestPwString(t *testing.T) {
+	s := goutil.PwString(0)
+	assert.EqualValues(t, 0, len(s))
+
+	r := regexp.MustCompile(`^[abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!#$%^~*&+\-=?_]+$`)
+	for i := 1; i <= 100; i++ {
+		s = goutil.PwString(i)
 		assert.EqualValues(t, i, len(s))
 		assert.True(t, r.Match([]byte(s)))
 	}

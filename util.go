@@ -140,26 +140,46 @@ func HubenyDistance(srcLatitude, srcLongitude, dstLatitude, dstLongitude float64
 var randSrc = rand.NewSource(time.Now().UnixNano())
 
 const (
-	rs6Letters       = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	rs6LetterIdxBits = 6
-	rs6LetterIdxMask = 1<<rs6LetterIdxBits - 1
-	rs6LetterIdxMax  = 63 / rs6LetterIdxBits
+	rsLetters       = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%^~*&+-=?_"
+	rsPwLetters     = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!#$%^~*&+-=?_"
+	rsLetterIdxBits = 6
+	rsLetterIdxMask = 1<<rsLetterIdxBits - 1
+	rsLetterIdxMax  = 63 / rsLetterIdxBits
 )
 
-// RandString returns random string given length.
+// RandString returns random string has given length.
 func RandString(n int) string {
 	b := make([]byte, n)
-	cache, remain := randSrc.Int63(), rs6LetterIdxMax
+	cache, remain := randSrc.Int63(), rsLetterIdxMax
 	for i := n - 1; i >= 0; {
 		if remain == 0 {
-			cache, remain = randSrc.Int63(), rs6LetterIdxMax
+			cache, remain = randSrc.Int63(), rsLetterIdxMax
 		}
-		idx := int(cache & rs6LetterIdxMask)
-		if idx < len(rs6Letters) {
-			b[i] = rs6Letters[idx]
+		idx := int(cache & rsLetterIdxMask)
+		if idx < len(rsLetters) {
+			b[i] = rsLetters[idx]
 			i--
 		}
-		cache >>= rs6LetterIdxBits
+		cache >>= rsLetterIdxBits
+		remain--
+	}
+	return string(b)
+}
+
+// PwString returns random string for password has given length.
+func PwString(n int) string {
+	b := make([]byte, n)
+	cache, remain := randSrc.Int63(), rsLetterIdxMax
+	for i := n - 1; i >= 0; {
+		if remain == 0 {
+			cache, remain = randSrc.Int63(), rsLetterIdxMax
+		}
+		idx := int(cache & rsLetterIdxMask)
+		if idx < len(rsPwLetters) {
+			b[i] = rsPwLetters[idx]
+			i--
+		}
+		cache >>= rsLetterIdxBits
 		remain--
 	}
 	return string(b)
