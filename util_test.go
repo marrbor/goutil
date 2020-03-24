@@ -330,12 +330,6 @@ func TestStructToStringMap(t *testing.T) {
 	assert.EqualValues(t, 0, len(*m))
 }
 
-func TestDetectOSVersion(t *testing.T) {
-	ver, err := goutil.DetectOSVersion()
-	assert.NoError(t, err)
-	t.Log(ver)
-}
-
 func TestGetMacAddress(t *testing.T) {
 	ip, err := goutil.GetIP()
 	assert.NoError(t, err)

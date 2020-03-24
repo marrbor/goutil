@@ -12,12 +12,10 @@ import (
 	"path"
 	"reflect"
 	"regexp"
-	"runtime"
 	"strings"
 	"time"
 
 	"github.com/google/uuid"
-	"golang.org/x/sys/unix"
 )
 
 type (
@@ -201,80 +199,6 @@ func StructToStringMap(tagName string, s interface{}) *map[string]string {
 		}
 	}
 	return &ret
-}
-
-// DetectOSVersion returns os version that run this program.
-func DetectOSVersion() (string, error) {
-	var ver string
-	var err error
-	os := runtime.GOOS
-	switch os {
-	case "windows":
-		ver, err = getWindowsVer()
-	case "darwin":
-		fallthrough
-	case "linux":
-		ver, err = getUnixVer()
-	default:
-		err = fmt.Errorf("unsupport runtime")
-	}
-	return ver, err
-}
-
-func getWindowsVer() (string, error) {
-	return "", nil
-}
-
-func uname2str(u []byte) string {
-	str := ""
-	for _, v := range u {
-		m := int(v)
-		if m <= 0 {
-			break
-		}
-		str += string(m)
-	}
-	return str
-}
-
-func getUnixVer() (string, error) {
-	var uname unix.Utsname
-	if err := unix.Uname(&uname); err != nil {
-		return "", err
-	}
-	return uname2str(uname.Version[:]), nil
-}
-
-func getUnixSysName() (string, error) {
-	var uname unix.Utsname
-	if err := unix.Uname(&uname); err != nil {
-		return "", err
-	}
-	return uname2str(uname.Sysname[:]), nil
-}
-
-func getUnixNodeName() (string, error) {
-	var uname unix.Utsname
-	if err := unix.Uname(&uname); err != nil {
-		return "", err
-	}
-	return uname2str(uname.Nodename[:]), nil
-}
-
-func getUnixMachineName() (string, error) {
-	var uname unix.Utsname
-	if err := unix.Uname(&uname); err != nil {
-		return "", err
-	}
-	return uname2str(uname.Machine[:]), nil
-}
-
-func getUnixRelease() (string, error) {
-	var uname unix.Utsname
-	if err := unix.Uname(&uname); err != nil {
-		return "", err
-	}
-	return uname2str(uname.Release[:]), nil
 }
 
 // GetIP returns IP address of this reporter
