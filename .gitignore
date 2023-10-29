@@ -37,7 +37,6 @@
 
 ### Emacs template
 # -*- mode: gitignore; -*-
-*~
 \#*\#
 /.emacs.desktop
 /.emacs.desktop.lock
@@ -172,3 +171,5 @@ Temporary Items
 
 # others
 bin/
+
+type/rune/out.csv
